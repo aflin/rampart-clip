@@ -21,7 +21,7 @@ reference image.
 ## Building
 
 ```bash
-git clone https://github.com/<your-org>/rampart-clip.git
+git clone https://github.com/aflin/rampart-clip.git
 cd rampart-clip
 mkdir build && cd build
 cmake ..

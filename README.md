@@ -1,5 +1,43 @@
 # rampart-clip
 
+> ## ⚠️ DEPRECATED — use rampart-langtools instead
+>
+> **This standalone project is no longer maintained.**  CLIP support has
+> been folded into
+> [rampart-langtools](https://github.com/aflin/rampart-langtools), which
+> ships `rampart-clip.so` alongside `rampart-llamacpp.so`,
+> `rampart-onnx.so`, `rampart-faiss.so` and `rampart-sentencepiece.so`.
+> The API is nearly identical, so porting a script is usually a one-line
+> change (`clip.load()` → `clip.initEmbed()`, which is still aliased to
+> `load`).
+>
+> The version in rampart-langtools is a port of this code onto the modern
+> shared ggml, and gains:
+>
+> - **GPU acceleration** — CUDA (with an arch/driver guard and automatic
+>   CPU fallback) and Apple Metal.
+> - **Thread-safe, thread-copyable model handles** — model objects survive
+>   being copied into rampart server worker threads.  Weights are held in
+>   a process-global refcounted cache, so loading the same model in many
+>   threads costs one copy of the weights.  (In *this* project a model is
+>   bound to the thread that loaded it; see [Threading](#threading) below.)
+> - **Image embedding from a `Buffer`**, not just a file path — so images
+>   coming from an HTTP upload or a database column need never touch disk.
+> - **Model downloading via `rampart-models.js`** — the CLIP models listed
+>   below are in its catalog and can be fetched with `models.pull()` /
+>   `models.ggufGet()` instead of by hand with `curl`.
+> - **Integration with rampart-sql**, in the same manner as
+>   rampart-llamacpp and rampart-onnx, for indexing and cross-modal search
+>   directly from SQL.
+> - Shared ggml with rampart-llamacpp, with vendored symbols hidden, so
+>   both modules can be loaded into one process without conflict.
+>
+> Documentation:
+> [rampart.dev/docs/rampart-langtools.html](https://rampart.dev/docs/rampart-langtools.html)
+>
+> Everything below describes the old standalone module and is kept for
+> reference only.
+
 A native [Rampart](https://github.com/aflin/rampart) module for CLIP
 (Contrastive Language-Image Pre-training) inference.  It wraps
 [monatis/clip.cpp](https://github.com/monatis/clip.cpp) to provide image
@@ -243,7 +281,9 @@ Vectors returned by this module are compatible with
 [rampart-langtools](https://github.com/aflin/rampart-langtools) for FAISS
 indexing and with Rampart's built-in
 [vector functions](https://rampart.dev/docs/rampart-vector.html)
-for distance calculations and type conversions.
+for distance calculations and type conversions.  Note that rampart-langtools
+now provides CLIP itself — see the deprecation notice at the top of this
+file.
 
 ## License
 
